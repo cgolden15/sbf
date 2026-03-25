@@ -1,0 +1,91 @@
+.neon-input:focus {
+  outline: none;
+  box-shadow: 0 0 12px rgba(68, 216, 241, 0.25);
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+.animate-pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+
+#toast {
+  visibility: hidden;
+  min-width: 220px;
+  background: rgba(32, 78, 234, 0.92);
+  backdrop-filter: blur(8px);
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  padding: 12px 20px;
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  z-index: 2000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+  font-family: Inter, sans-serif;
+  white-space: nowrap;
+}
+
+#helpModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  backdrop-filter: blur(6px);
+  z-index: 1100;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+#helpModal > div {
+  background: #1a1a1a;
+  border: 1px solid rgba(187,201,204,0.12);
+  color: #e0e0e0;
+  max-width: 440px;
+  width: 100%;
+  padding: 1.75rem;
+  border-radius: 12px;
+  position: relative;
+  font-family: Inter, sans-serif;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 30px rgba(68,216,241,0.2);
+}
+#closeHelp {
+  position: absolute; top: 12px; right: 14px;
+  background: transparent; border: none;
+  font-size: 22px; cursor: pointer; font-weight: bold; line-height: 1;
+  color: #44d8f1;
+}
+
+.copyable { cursor: pointer; transition: opacity 0.15s; }
+.copyable:hover { opacity: 0.7; }
+
+#helpBtn {
+  position: fixed; bottom: 88px; right: 20px;
+  background: #44d8f1; border: none; border-radius: 50%;
+  width: 40px; height: 40px;
+  color: #00363e; font-size: 18px; font-weight: 700;
+  cursor: pointer; z-index: 999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 16px rgba(68,216,241,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#helpBtn:hover { transform: scale(1.1); box-shadow: 0 0 22px rgba(68,216,241,0.5); }
+
+.denom-val {
+  min-height: 12px;
+  font-size: 10px;
+  text-align: right;
+  padding-right: 2px;
+  color: rgba(255,255,255,0.2);
+  font-family: 'Space Grotesk', sans-serif;
+}

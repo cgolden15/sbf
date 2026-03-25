@@ -1,495 +1,332 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SBF Drawer Counter</title>
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23121212'/><rect x='10' y='20' width='80' height='60' rx='8' fill='%231e1e1e' stroke='%2300bcd4' stroke-width='2'/><rect x='15' y='25' width='70' height='50' fill='%232a2a2a'/><rect x='20' y='30' width='15' height='8' rx='2' fill='%234caf50'/><rect x='20' y='42' width='15' height='8' rx='2' fill='%234caf50'/><rect x='20' y='54' width='15' height='8' rx='2' fill='%234caf50'/><rect x='40' y='30' width='15' height='8' rx='2' fill='%234caf50'/><rect x='40' y='42' width='15' height='8' rx='2' fill='%234caf50'/><rect x='40' y='54' width='15' height='8' rx='2' fill='%234caf50'/><circle cx='70' cy='34' r='4' fill='%23ffca28'/><circle cx='70' cy='46' r='4' fill='%23ffca28'/><circle cx='70' cy='58' r='4' fill='%23ffca28'/><rect x='25' y='85' width='50' height='8' rx='2' fill='%2300bcd4'/></svg>"
-      type="image/svg+xml"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="calculator" role="main" aria-label="Shady Brook Drawer Counter">
-      <div class="main-content">
-        <h1>SBF Drawer Counter</h1>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Drawer Counter</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23121212'/><rect x='10' y='20' width='80' height='60' rx='8' fill='%231e1e1e' stroke='%2300bcd4' stroke-width='2'/><rect x='15' y='25' width='70' height='50' fill='%232a2a2a'/><rect x='20' y='30' width='15' height='8' rx='2' fill='%234caf50'/><rect x='20' y='42' width='15' height='8' rx='2' fill='%234caf50'/><rect x='20' y='54' width='15' height='8' rx='2' fill='%234caf50'/><rect x='40' y='30' width='15' height='8' rx='2' fill='%234caf50'/><rect x='40' y='42' width='15' height='8' rx='2' fill='%234caf50'/><rect x='40' y='54' width='15' height='8' rx='2' fill='%234caf50'/><circle cx='70' cy='34' r='4' fill='%23ffca28'/><circle cx='70' cy='46' r='4' fill='%23ffca28'/><circle cx='70' cy='58' r='4' fill='%23ffca28'/><rect x='25' y='85' width='50' height='8' rx='2' fill='%2300bcd4'/></svg>" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="tailwind.config.js"></script>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <link rel="stylesheet" href="css/app.css"/>
+</head>
+<body class="bg-surface text-on-surface font-body min-h-screen flex flex-col">
 
-        <div class="start-bank-container">
-          <label for="startBank">Start Bank ($):</label>
+<!-- Nav -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_0_rgba(68,216,241,0.08)]" style="height:56px">
+  <div class="grid grid-cols-3 items-center px-6 h-full max-w-screen-2xl mx-auto">
+    <div class="text-xl font-headline font-bold tracking-tighter text-primary">Shady Brook Farm</div>
+    <div class="hidden md:flex justify-center items-center space-x-6 font-headline font-bold tracking-tight text-sm">
+      <a class="text-primary border-b-2 border-primary pb-0.5 transition-all" href="index.html">Count</a>
+      <button id="historyNavBtn" class="text-white/55 hover:text-white transition-colors bg-transparent border-none cursor-pointer font-headline font-bold tracking-tight text-sm p-0">History</button>
+    </div>
+    <div class="flex justify-end items-center space-x-1">
+      <button id="historyMobileBtn" class="p-2 text-white/55 hover:bg-white/5 rounded-lg transition-all active:scale-95 md:hidden">
+        <span class="material-symbols-outlined text-xl">history</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Main layout -->
+<div class="layout-root flex flex-col lg:flex-row mt-14 max-w-screen-2xl mx-auto w-full px-5 lg:px-8 gap-5 lg:gap-6 py-5 lg:py-4 pb-24 lg:pb-0">
+
+  <!-- ── Left panel: inputs ─────────────────────────────────── -->
+  <div class="panel-left flex flex-col flex-1 min-w-0 gap-4">
+
+    <!-- Page title + Starting Bank -->
+    <div class="flex-none flex flex-row items-center justify-between gap-4">
+      <div>
+        <h1 class="font-headline text-2xl lg:text-3xl font-bold tracking-tight text-white leading-tight">Drawer Reconciliation</h1>
+        <p class="text-white/35 font-label text-xs uppercase tracking-[0.2em] mt-0.5">"Money Money Money Money" - Mr. Crabs</p>
+      </div>
+      <div class="space-y-1 shrink-0">
+        <label for="startBank" class="text-[10px] text-white/40 uppercase tracking-widest">Starting Bank</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 font-headline text-sm">$</span>
           <input
-            type="number"
-            step="0.01"
-            id="startBank"
-            min="0"
-            placeholder="Enter amount"
+            type="number" step="0.01" id="startBank" min="0" placeholder="350.00"
+            class="bg-surface-container-lowest border border-white/10 rounded-lg py-2.5 pl-7 pr-3 text-white neon-input focus:ring-1 focus:ring-primary transition-all font-headline text-base w-36"
           />
-          <button type="button" id="clearBtn">Clear</button>
         </div>
+      </div>
+    </div>
 
-        <!-- Bills Section -->
-        <h2>Bills</h2>
-        <form id="money-form" aria-label="Currency inputs">
-          <div>
-            <label for="ones">$1 bills:</label>
-            <input type="number" id="ones" min="0" />
-          </div>
-          <div>
-            <label for="fives">$5 bills:</label>
-            <input type="number" id="fives" min="0" />
-          </div>
-          <div>
-            <label for="tens">$10 bills:</label>
-            <input type="number" id="tens" min="0" />
-          </div>
-          <div>
-            <label for="twenties">$20 bills:</label>
-            <input type="number" id="twenties" min="0" />
-          </div>
-          <div>
-            <label for="fifties">$50 bills:</label>
-            <input type="number" id="fifties" min="0" />
-          </div>
-          <div>
-            <label for="hundreds">$100 bills:</label>
-            <input type="number" id="hundreds" min="0" />
-          </div>
+    <!-- Paper Currency -->
+    <div class="glass-card rounded-xl p-4 space-y-3 flex-none">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-lg">payments</span>
+          <h2 class="font-headline text-base font-bold tracking-tight">Paper Bills</h2>
+        </div>
+        <span id="billsSubtotal" class="font-headline font-bold text-primary/65 text-sm">$0.00</span>
+      </div>
+      <!-- 6 bills in one row -->
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+        <div class="space-y-1">
+          <label for="ones" class="denom-label text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$1</label>
+          <input type="number" id="ones" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-primary neon-input focus:ring-1 focus:ring-primary transition-all font-headline text-lg"/>
+          <div id="val-ones" class="denom-val"></div>
+        </div>
+        <div class="space-y-1">
+          <label for="fives" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$5</label>
+          <input type="number" id="fives" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-primary neon-input focus:ring-1 focus:ring-primary transition-all font-headline text-lg"/>
+          <div id="val-fives" class="denom-val"></div>
+        </div>
+        <div class="space-y-1">
+          <label for="tens" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$10</label>
+          <input type="number" id="tens" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-primary neon-input focus:ring-1 focus:ring-primary transition-all font-headline text-lg"/>
+          <div id="val-tens" class="denom-val"></div>
+        </div>
+        <div class="space-y-1">
+          <label for="twenties" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$20</label>
+          <input type="number" id="twenties" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-primary neon-input focus:ring-1 focus:ring-primary transition-all font-headline text-lg"/>
+          <div id="val-twenties" class="denom-val"></div>
+        </div>
+        <div class="space-y-1">
+          <label for="fifties" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$50</label>
+          <input type="number" id="fifties" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-primary neon-input focus:ring-1 focus:ring-primary transition-all font-headline text-lg"/>
+          <div id="val-fifties" class="denom-val"></div>
+        </div>
+        <div class="space-y-1">
+          <label for="hundreds" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$100</label>
+          <input type="number" id="hundreds" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-primary neon-input focus:ring-1 focus:ring-primary transition-all font-headline text-lg"/>
+          <div id="val-hundreds" class="denom-val"></div>
+        </div>
+      </div>
+    </div>
 
-          <!-- Coins Section -->
-          <h2>Coins</h2>
-          <div>
-            <label for="pennies">Pennies:</label>
-            <input type="number" id="pennies" min="0" />
-          </div>
-          <div>
-            <label for="nickels">Nickels:</label>
-            <input type="number" id="nickels" min="0" />
-          </div>
-          <div>
-            <label for="dimes">Dimes:</label>
-            <input type="number" id="dimes" min="0" />
-          </div>
-          <div>
-            <label for="quarters">Quarters:</label>
-            <input type="number" id="quarters" min="0" />
-          </div>
+    <!-- Coins + Rolls row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-          <!-- Coin Rolls Section -->
-          <h2>Coin Rolls</h2>
-          <div>
-            <label for="rollPennies">Penny rolls (50¢ each):</label>
-            <input type="number" id="rollPennies" min="0" />
+      <!-- Loose Coins -->
+      <div class="glass-card rounded-xl p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-lg">monetization_on</span>
+            <h2 class="font-headline text-base font-bold tracking-tight">Loose Coins</h2>
           </div>
-          <div>
-            <label for="rollNickels">Nickel rolls ($2 each):</label>
-            <input type="number" id="rollNickels" min="0" />
+          <span id="coinsSubtotal" class="font-headline font-bold text-secondary/65 text-sm">$0.00</span>
+        </div>
+        <div class="grid grid-cols-4 gap-3">
+          <div class="space-y-1">
+            <label for="pennies" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">¢1</label>
+            <input type="number" id="pennies" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-secondary neon-input focus:ring-1 focus:ring-secondary transition-all font-headline text-lg"/>
+            <div id="val-pennies" class="denom-val"></div>
           </div>
-          <div>
-            <label for="rollDimes">Dime rolls ($5 each):</label>
-            <input type="number" id="rollDimes" min="0" />
+          <div class="space-y-1">
+            <label for="nickels" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">¢5</label>
+            <input type="number" id="nickels" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-secondary neon-input focus:ring-1 focus:ring-secondary transition-all font-headline text-lg"/>
+            <div id="val-nickels" class="denom-val"></div>
           </div>
-          <div>
-            <label for="rollQuarters">Quarter rolls ($10 each):</label>
-            <input type="number" id="rollQuarters" min="0" />
+          <div class="space-y-1">
+            <label for="dimes" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">¢10</label>
+            <input type="number" id="dimes" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-secondary neon-input focus:ring-1 focus:ring-secondary transition-all font-headline text-lg"/>
+            <div id="val-dimes" class="denom-val"></div>
           </div>
-        </form>
-
-        <div class="totals" aria-live="polite" aria-atomic="true">
-          <div>Total: <span id="total" role="text">$0.00</span></div>
-          <div class="deposit">
-            Deposit: <span id="deposit" role="text">$0.00</span>
-            <button
-              type="button"
-              class="save-entry-btn"
-              id="saveEntryBtn"
-              title="Save to History"
-            >
-              💾
-            </button>
+          <div class="space-y-1">
+            <label for="quarters" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">¢25</label>
+            <input type="number" id="quarters" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-secondary neon-input focus:ring-1 focus:ring-secondary transition-all font-headline text-lg"/>
+            <div id="val-quarters" class="denom-val"></div>
           </div>
         </div>
       </div>
 
-      <aside class="side-panel" id="sidePanel" aria-label="Break down deposit">
-        <h3>Deposit Breakdown</h3>
-        <ul id="breakdownList">
-          <li>No bills/coins to remove.</li>
-        </ul>
-        <div
-          id="breakdownSum"
-          style="
-            margin-top: auto;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #4caf50;
-            padding-top: 12px;
-            border-top: 1px solid #333;
-          "
-        >
-          $0.00
+      <!-- Coin Rolls -->
+      <div class="glass-card rounded-xl p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-tertiary text-lg">toll</span>
+            <h2 class="font-headline text-base font-bold tracking-tight">Coin Rolls</h2>
+          </div>
+          <span id="rollsSubtotal" class="font-headline font-bold text-tertiary/65 text-sm">$0.00</span>
         </div>
-      </aside>
-    </div>
-
-    <div id="toast"></div>
-
-    <button id="helpBtn" aria-label="Help" title="Help">?</button>
-    <button id="historyBtn" aria-label="History" title="View History">
-      📊
-    </button>
-
-    <div id="historyModal">
-      <div>
-        <button
-          id="closeHistory"
-          aria-label="Close History"
-          title="Close History"
-        >
-          &times;
-        </button>
-        <h2 style="color: #ff9800; margin-top: 0">History</h2>
-        <p>Saved drawer counts and deposits:</p>
-        <div id="historyList">
-          <div style="text-align: center; color: #666; padding: 20px">
-            No history entries yet. Save an entry to get started!
+        <div class="grid grid-cols-4 gap-3">
+          <div class="space-y-1">
+            <label for="rollPennies" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">¢50</label>
+            <input type="number" id="rollPennies" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-tertiary neon-input focus:ring-1 focus:ring-tertiary transition-all font-headline text-lg"/>
+            <div id="val-rollPennies" class="denom-val"></div>
+          </div>
+          <div class="space-y-1">
+            <label for="rollNickels" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$2</label>
+            <input type="number" id="rollNickels" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-tertiary neon-input focus:ring-1 focus:ring-tertiary transition-all font-headline text-lg"/>
+            <div id="val-rollNickels" class="denom-val"></div>
+          </div>
+          <div class="space-y-1">
+            <label for="rollDimes" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$5</label>
+            <input type="number" id="rollDimes" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-tertiary neon-input focus:ring-1 focus:ring-tertiary transition-all font-headline text-lg"/>
+            <div id="val-rollDimes" class="denom-val"></div>
+          </div>
+          <div class="space-y-1">
+            <label for="rollQuarters" class="text-[10px] text-white/35 uppercase tracking-widest ml-0.5">$10</label>
+            <input type="number" id="rollQuarters" min="0" placeholder="0" class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-tertiary neon-input focus:ring-1 focus:ring-tertiary transition-all font-headline text-lg"/>
+            <div id="val-rollQuarters" class="denom-val"></div>
           </div>
         </div>
-        <button type="button" class="clear-history-btn" id="clearHistoryBtn">
-          Clear All History
-        </button>
+      </div>
+
+    </div><!-- end coins/rolls row -->
+  </div><!-- end left panel -->
+
+  <!-- ── Right panel: deposit breakdown ────────────────────── -->
+  <div class="panel-right flex flex-col w-full lg:w-80 xl:w-96 shrink-0 gap-4 lg:self-stretch">
+
+    <!-- Summary stats -->
+    <div class="glass-card rounded-xl p-4 flex flex-col gap-3 flex-none">
+      <div class="grid grid-cols-2 gap-x-4">
+        <div>
+          <div class="text-[10px] text-white/35 uppercase tracking-widest mb-0.5">Grand Total</div>
+          <div id="grandTotalCardDisplay" class="text-lg font-headline font-bold text-white copyable" title="Click to copy">$0.00</div>
+        </div>
+        <div>
+          <div class="text-[10px] text-primary uppercase tracking-widest mb-0.5">Net Deposit</div>
+          <div id="netDepositDisplay" class="text-lg font-headline font-bold text-primary copyable" title="Click to copy">$0.00</div>
+        </div>
+      </div>
+      <div class="pt-2 border-t border-white/5">
+        <div class="text-[10px] text-white/35 uppercase tracking-widest mb-0.5">Bank Retained</div>
+        <div id="bankRetainedDisplay" class="text-sm font-headline font-bold text-secondary">-$0.00</div>
       </div>
     </div>
 
-    <div id="helpModal">
-      <div>
-        <button id="closeHelp" aria-label="Close Help" title="Close Help">
-          &times;
-        </button>
-        <h2 style="color: #00bcd4; margin-top: 0">User Guide:</h2>
-        <p>
-          Enter the quantity of each bill, coin, and coin roll in the boxes.<br /><br />
-          The <strong>Total</strong> at the bottom shows the total cash
-          amount.<br /><br />
-          The <strong>Deposit</strong> shows your total cash minus your starting
-          bank.<br /><br /><br />
-          <em>and because I'm lazy,</em><br /><br />
-          Use the <strong>Deposit Breakdown</strong> panel to automatically
-          calculate what to pull for your deposit.<br /><br />
-          - <strong>Cameron</strong>.<br /><br />
-          <a
-            href="https://github.com/cgolden15/sbf/tree/main/count"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="color: #00bcd4; text-decoration: underline"
-            >Source Code</a
-          >
-        </p>
+    <!-- Deposit breakdown details -->
+    <div class="glass-card rounded-xl p-4 flex flex-col gap-4 lg:flex-1">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-lg">analytics</span>
+          <h2 class="font-headline text-base font-bold tracking-tight">Deposit Breakdown</h2>
+        </div>
+      </div>
+
+      <!-- Bills to Remove -->
+      <div class="space-y-2">
+        <span class="text-[10px] text-primary/70 uppercase tracking-widest">Bills to Remove</span>
+        <div class="grid grid-cols-6 gap-2">
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">$100</span>
+            <span id="remove-hundreds" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">$50</span>
+            <span id="remove-fifties" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">$20</span>
+            <span id="remove-twenties" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">$10</span>
+            <span id="remove-tens" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">$5</span>
+            <span id="remove-fives" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">$1</span>
+            <span id="remove-ones" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coins to Remove -->
+      <div class="space-y-2 pt-3 border-t border-white/5">
+        <span id="reconcileStatus" class="text-[10px] text-primary/70 uppercase tracking-widest">Coins to Remove</span>
+        <div class="grid grid-cols-4 gap-2">
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">¢25</span>
+            <span id="remove-quarters" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">¢10</span>
+            <span id="remove-dimes" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">¢5</span>
+            <span id="remove-nickels" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+          <div class="bg-surface-container-lowest p-2 rounded-lg border border-white/5 flex flex-col items-center gap-1">
+            <span class="text-[9px] text-white/35 uppercase">¢1</span>
+            <span id="remove-pennies" class="text-base font-headline font-bold text-white">0</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        loadStartBank();
-        updateTotals();
-      });
+  </div><!-- end right panel -->
 
-      const inputs = document.querySelectorAll("#money-form input, #startBank");
-      const totalDisplay = document.getElementById("total");
-      const depositDisplay = document.getElementById("deposit");
-      const breakdownList = document.getElementById("breakdownList");
-      const clearBtn = document.getElementById("clearBtn");
-      const saveEntryBtn = document.getElementById("saveEntryBtn");
-      const historyBtn = document.getElementById("historyBtn");
-      const historyModal = document.getElementById("historyModal");
-      const closeHistory = document.getElementById("closeHistory");
-      const historyList = document.getElementById("historyList");
-      const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+</div><!-- end layout root -->
 
-      const denominations = [
-        { id: "hundreds", value: 100 },
-        { id: "fifties", value: 50 },
-        { id: "twenties", value: 20 },
-        { id: "tens", value: 10 },
-        { id: "fives", value: 5 },
-        { id: "ones", value: 1 },
-        { id: "quarters", value: 0.25 },
-        { id: "dimes", value: 0.1 },
-        { id: "nickels", value: 0.05 },
-        { id: "pennies", value: 0.01 },
-      ];
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 w-full z-40 bg-[#131313]/90 backdrop-blur-2xl border-t border-white/8" style="height:68px">
+  <div class="max-w-screen-2xl mx-auto px-5 lg:px-8 h-full flex items-center justify-between gap-6">
+    <div class="flex items-center gap-6">
+      <div class="flex flex-col gap-0.5">
+        <span class="text-[10px] text-white/30 uppercase tracking-[0.2em]">Status</span>
+        <span class="font-bold text-xs flex items-center gap-1.5">
+          <span id="drawerStatusDot" class="w-2 h-2 rounded-full bg-white/25 flex-shrink-0"></span>
+          <span id="drawerStatusText" class="text-white/40">Ready</span>
+        </span>
+      </div>
+      <div class="h-7 w-px bg-white/8 hidden sm:block"></div>
+      <div class="flex flex-col gap-0">
+        <span class="text-[10px] text-white/30 uppercase tracking-[0.2em]">Grand Total</span>
+        <span id="grandTotalDisplay" class="text-2xl sm:text-3xl font-headline font-bold text-primary tracking-tighter animate-pulse-soft copyable leading-tight" title="Click to copy">$0.00</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="newCountBtn" class="px-4 sm:px-5 py-2 bg-surface-container-high hover:bg-surface-bright text-white font-bold rounded-lg transition-all border border-white/8 uppercase tracking-widest text-xs active:scale-95 whitespace-nowrap">
+        New Count
+      </button>
+      <button id="saveOnlyBtn" class="px-3 py-2 text-white/35 hover:text-white/65 font-medium text-xs uppercase tracking-widest transition-all active:scale-95 whitespace-nowrap hidden sm:block">
+        Save Only
+      </button>
+      <button id="saveResetBtn" class="px-6 sm:px-8 py-2 bg-primary text-on-primary font-black rounded-lg hover:shadow-[0_0_24px_0_#44d8f144] active:scale-95 transition-all uppercase tracking-widest text-xs whitespace-nowrap">
+        Save &amp; Reset
+      </button>
+    </div>
+  </div>
+</div>
 
-      const rollValues = {
-        rollPennies: 0.5,
-        rollNickels: 2.0,
-        rollDimes: 5.0,
-        rollQuarters: 10.0,
-      };
+<!-- Hidden compat elements -->
+<span id="total" style="display:none">$0.00</span>
+<span id="deposit" style="display:none">$0.00</span>
+<ul id="breakdownList" style="display:none"></ul>
+<div id="breakdownSum" style="display:none">$0.00</div>
 
-      // History management functions
-      function saveToHistory(total, deposit) {
-        const timestamp = new Date();
-        const entry = {
-          total: total,
-          deposit: deposit,
-          timestamp: timestamp.toISOString(),
-          displayTime: timestamp.toLocaleString(),
-        };
+<!-- Toast -->
+<div id="toast"></div>
 
-        let history = getHistory();
-        history.unshift(entry); // Add to beginning of array
+<!-- Floating Help Button -->
+<button id="helpBtn" aria-label="Help" title="Help">?</button>
 
-        // Keep only the last 10 entries
-        if (history.length > 10) {
-          history = history.slice(0, 10);
-        }
+<!-- Help Modal -->
+<div id="helpModal">
+  <div>
+    <button id="closeHelp" aria-label="Close Help">&times;</button>
+    <h2 style="color:#44d8f1;margin-top:0;font-family:Space Grotesk,sans-serif;">User Guide</h2>
+    <p style="line-height:1.7;font-size:0.88rem;">
+      Enter the quantity of each bill, coin, and coin roll.<br/><br/>
+      Set <strong>Starting Bank</strong> to your drawer's starting amount (typically $350).<br/><br/>
+      The <strong>Grand Total</strong> shows total cash counted. <strong>Net Deposit</strong> is total minus the bank.<br/><br/>
+      The <strong>Deposit Breakdown</strong> shows exactly which bills and coins to pull for the deposit.<br/><br/>
+      Click <strong>Net Deposit</strong> or <strong>Grand Total</strong> to copy to clipboard.<br/><br/>
+      <strong>Save &amp; Reset</strong> saves to history and clears inputs for the next count.<br/><br/>
+      — <strong>Cameron</strong><br/><br/>
+      <a href="https://github.com/cgolden15/sbf/tree/main/count" target="_blank" rel="noopener noreferrer"
+         style="color:#44d8f1;text-decoration:underline;">Source Code</a>
+    </p>
+  </div>
+</div>
 
-        // Save to localStorage
-        localStorage.setItem("drawerHistory", JSON.stringify(history));
-        showToast("Entry saved to history!");
-      }
+<!-- Footer (mobile only) -->
+<footer class="lg:hidden bg-[#131313] w-full py-4 border-t border-white/5 flex justify-between items-center px-6 text-[10px] tracking-widest uppercase text-white/25">
+  <span>© 2024 Shady Brook Farm</span>
+  <a href="https://github.com/cgolden15/sbf/tree/main/count" target="_blank" rel="noopener noreferrer" class="hover:text-white/50 transition-all">Source</a>
+</footer>
 
-      function getHistory() {
-        try {
-          const stored = localStorage.getItem("drawerHistory");
-          return stored ? JSON.parse(stored) : [];
-        } catch (error) {
-          console.error("Error loading history:", error);
-          return [];
-        }
-      }
-
-      function clearHistory() {
-        localStorage.removeItem("drawerHistory");
-        displayHistory();
-        showToast("History cleared!");
-      }
-
-      function saveStartBank(value) {
-        if (value) {
-          localStorage.setItem("startBank", value.toString());
-        } else {
-          localStorage.removeItem("startBank");
-        }
-      }
-
-      function loadStartBank() {
-        const saved = localStorage.getItem("startBank");
-        if (saved) {
-          document.getElementById("startBank").value = saved;
-        }
-      }
-
-      function displayHistory() {
-        const history = getHistory();
-
-        if (history.length === 0) {
-          historyList.innerHTML = `
-            <div style="text-align: center; color: #666; padding: 20px;">
-              No history entries yet. Save an entry to get started!
-            </div>
-          `;
-          return;
-        }
-
-        const historyHTML = history
-          .map(
-            (entry) => `
-          <div class="history-item">
-            <div class="history-timestamp">${entry.displayTime}</div>
-            <div class="history-amounts">
-              <span class="history-total">Total: $${entry.total.toFixed(
-                2
-              )}</span>
-              <span class="history-deposit">Deposit: $${entry.deposit.toFixed(
-                2
-              )}</span>
-            </div>
-          </div>
-        `
-          )
-          .join("");
-
-        historyList.innerHTML = historyHTML;
-      }
-
-      function updateTotals() {
-        let total = 0;
-        denominations.forEach((denom) => {
-          const count = +document.getElementById(denom.id).value || 0;
-          total += count * denom.value;
-        });
-
-        for (let roll in rollValues) {
-          const count = +document.getElementById(roll).value || 0;
-          total += count * rollValues[roll];
-        }
-
-        const startBank =
-          parseFloat(document.getElementById("startBank").value) || 0;
-        const deposit = Math.max(total - startBank, 0);
-
-        totalDisplay.textContent = `$${total.toFixed(2)}`;
-        depositDisplay.textContent = `$${deposit.toFixed(2)}`;
-
-        updateBreakdownList(deposit);
-      }
-
-      function updateBreakdownList(deposit) {
-        breakdownList.innerHTML = "";
-        const breakdownSumEl = document.getElementById("breakdownSum");
-
-        if (deposit === 0) {
-          breakdownList.innerHTML = "<li>No bills/coins to remove.</li>";
-          breakdownSumEl.textContent = "$0.00";
-          breakdownSumEl.style.color = "#4caf50"; // green color
-          return;
-        }
-
-        let remaining = deposit;
-        let breakdownItems = [];
-        let sumOfBills = 0;
-
-        denominations.forEach((denom) => {
-          let available = +document.getElementById(denom.id).value || 0;
-          let needed = Math.min(Math.floor(remaining / denom.value), available);
-          if (needed > 0) {
-            breakdownItems.push(`${needed} × $${denom.value.toFixed(2)}`);
-            sumOfBills += needed * denom.value;
-            remaining -= needed * denom.value;
-            remaining = Math.round(remaining * 100) / 100;
-          }
-        });
-
-        if (breakdownItems.length === 0) {
-          breakdownList.innerHTML = "<li>No bills/coins to remove.</li>";
-          breakdownSumEl.textContent = "$0.00";
-          breakdownSumEl.style.color = "#4caf50";
-        } else {
-          breakdownItems.forEach((item) => {
-            const li = document.createElement("li");
-            li.textContent = item;
-            breakdownList.appendChild(li);
-          });
-
-          // Verify sum of deposit matches calculated deposit
-          if (Math.abs(sumOfBills - deposit) < 0.01) {
-            breakdownSumEl.textContent = `Sum of Deposit: $${sumOfBills.toFixed(
-              2
-            )}`;
-            breakdownSumEl.style.color = "#4caf50"; // green for OK
-          } else {
-            breakdownSumEl.textContent = "error";
-            breakdownSumEl.style.color = "#f44336"; // red for error
-            showToast(
-              "Error: Deposit breakdown does not match deposit due to a floating point rounding issue."
-            );
-          }
-        }
-      }
-
-      clearBtn.addEventListener("click", () => {
-        saveToHistory(
-          parseFloat(totalDisplay.textContent.replace("$", "")),
-          parseFloat(depositDisplay.textContent.replace("$", ""))
-        );
-        inputs.forEach((input) => {
-          if (input.id !== "startBank") {
-            input.value = "";
-          }
-        });
-        updateTotals();
-      });
-
-      inputs.forEach((input, index) => {
-        input.addEventListener("input", updateTotals);
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            if (index < inputs.length - 1) {
-              inputs[index + 1].focus();
-            } else {
-              inputs[0].focus();
-            }
-          }
-        });
-      });
-
-      // Event listeners for history functionality
-      saveEntryBtn.addEventListener("click", () => {
-        const total = parseFloat(totalDisplay.textContent.replace("$", ""));
-        const deposit = parseFloat(depositDisplay.textContent.replace("$", ""));
-
-        console.log(`Saving entry: Total = ${total}, Deposit = ${deposit}`);
-
-        if (total > 0) {
-          saveToHistory(total, deposit);
-        } else {
-          showToast("Nothing to save - enter some amounts first!");
-        }
-      });
-
-      historyBtn.addEventListener("click", () => {
-        displayHistory();
-        historyModal.style.display = "flex";
-      });
-
-      closeHistory.addEventListener("click", () => {
-        historyModal.style.display = "none";
-      });
-
-      clearHistoryBtn.addEventListener("click", () => {
-        if (
-          confirm(
-            "Are you sure you want to clear all history? This cannot be undone."
-          )
-        ) {
-          clearHistory();
-        }
-      });
-
-      // Close history modal when clicking outside
-      historyModal.addEventListener("click", (e) => {
-        if (e.target === historyModal) {
-          historyModal.style.display = "none";
-        }
-      });
-
-      function showToast(message) {
-        const toast = document.getElementById("toast");
-        toast.textContent = message;
-        toast.style.visibility = "visible";
-        toast.style.opacity = "1";
-
-        clearTimeout(toast._timeout);
-        toast._timeout = setTimeout(() => {
-          toast.style.opacity = "0";
-          toast.style.visibility = "hidden";
-        }, 5000); // Toast visible for 5 seconds
-      }
-
-      const helpBtn = document.getElementById("helpBtn");
-      const helpModal = document.getElementById("helpModal");
-      const closeHelp = document.getElementById("closeHelp");
-
-      helpBtn.addEventListener("click", () => {
-        helpModal.style.display = "flex";
-      });
-
-      closeHelp.addEventListener("click", () => {
-        helpModal.style.display = "none";
-      });
-
-      // Close help modal when clicking outside the content box
-      helpModal.addEventListener("click", (e) => {
-        if (e.target === helpModal) {
-          helpModal.style.display = "none";
-        }
-      });
-
-      // Initialize the app
-      updateTotals();
-    </script>
-  </body>
+<script src="js/app.js"></script>
+</body>
 </html>
