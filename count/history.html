@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Shady Brook — Drawer History</title>
+  <link rel="stylesheet" href="css/tailwind.css"/>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      background: rgba(32, 78, 234, 0.92);
+      backdrop-filter: blur(8px);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      padding: 14px 20px;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      z-index: 2000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+      font-family: Inter, sans-serif;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body min-h-screen">
+
+<!-- Nav -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_0_rgba(68,216,241,0.08)]" style="height:56px">
+  <div class="grid grid-cols-3 items-center px-6 h-full max-w-screen-2xl mx-auto">
+    <div class="text-xl font-headline font-bold tracking-tighter text-primary">Shady Brook Farm</div>
+    <div class="hidden md:flex justify-center items-center space-x-6 font-headline font-bold tracking-tight text-sm">
+      <a class="text-white/55 hover:text-white transition-colors" href="./">Count</a>
+      <a class="text-primary border-b-2 border-primary pb-0.5 transition-all" href="history">History</a>
+    </div>
+    <div class="flex justify-end items-center space-x-1">
+      <a href="./" class="p-2 text-white/55 hover:bg-white/5 rounded-lg transition-all active:scale-95 md:hidden">
+        <span class="material-symbols-outlined text-xl">calculate</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Main -->
+<main class="pt-20 pb-16 max-w-5xl mx-auto px-4 md:px-6">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+    <div>
+      <h1 class="font-headline text-3xl md:text-4xl font-bold tracking-tight text-white">Drawer History</h1>
+      <p class="text-white/40 font-label text-sm uppercase tracking-[0.2em] mt-1">Saved close-out sessions</p>
+    </div>
+    <button id="clearAllBtn" class="flex items-center gap-2 px-4 py-2 bg-error/10 hover:bg-error/20 text-error border border-error/20 rounded-lg font-label text-sm transition-all active:scale-95">
+      <span class="material-symbols-outlined text-base">delete_sweep</span>
+      Clear All
+    </button>
+  </div>
+
+  <!-- Column headers -->
+  <div class="grid grid-cols-12 px-4 mb-3 text-[10px] font-label uppercase tracking-widest text-white/30">
+    <div class="col-span-5 sm:col-span-4">Date &amp; Time</div>
+    <div class="col-span-3 text-right">Grand Total</div>
+    <div class="col-span-3 text-right">Net Deposit</div>
+    <div class="col-span-1 text-right"></div>
+  </div>
+
+  <!-- Entry list -->
+  <div id="historyList" class="space-y-3"></div>
+
+  <!-- Empty state -->
+  <div id="emptyState" class="hidden glass-card rounded-xl px-6 py-16 text-center">
+    <span class="material-symbols-outlined text-white/20 text-5xl block mb-4">history</span>
+    <p class="text-white/40 font-label text-sm uppercase tracking-widest">No history saved yet</p>
+    <a href="./" class="inline-block mt-6 text-primary text-sm hover:underline">Go count a drawer</a>
+  </div>
+
+</main>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="js/history.js"></script>
+</body>
+</html>

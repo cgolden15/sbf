@@ -1,0 +1,13 @@
+{
+  "name": "sbf-tools",
+  "version": "1.0.0",
+  "description": "Internal tools for Shady Brook Farm",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./count/css/tailwind.css --minify",
+    "dev": "tailwindcss -i ./src/input.css -o ./count/css/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "@tailwindcss/forms": "^0.5.7"
+  }
+}
