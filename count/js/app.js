@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   ["historyNavBtn", "historyMobileBtn"].forEach(id => {
     const btn = el(id);
-    if (btn) btn.addEventListener("click", () => { window.location.href = "history.html"; });
+    if (btn) btn.addEventListener("click", () => { window.location.href = "history"; });
   });
 
   el("helpBtn").addEventListener("click",   () => { el("helpModal").style.display = "flex"; });
