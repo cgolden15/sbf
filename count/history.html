@@ -7,7 +7,55 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <script src="tailwind.config.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-variant": "#353535",
+            "surface-container-lowest": "#0e0e0e",
+            "error": "#ffb4ab",
+            "on-primary": "#00363e",
+            "secondary": "#78dc77",
+            "primary-container": "#00bcd4",
+            "outline-variant": "#3c494c",
+            "surface-container-highest": "#353535",
+            "background": "#131313",
+            "on-secondary": "#00390a",
+            "secondary-container": "#00761f",
+            "surface": "#131313",
+            "on-tertiary": "#4a2800",
+            "on-error": "#690005",
+            "surface-container-high": "#2a2a2a",
+            "error-container": "#93000a",
+            "on-surface": "#e5e2e1",
+            "inverse-on-surface": "#303030",
+            "on-background": "#e5e2e1",
+            "surface-bright": "#393939",
+            "on-primary-container": "#004650",
+            "primary": "#44d8f1",
+            "outline": "#869396",
+            "primary-fixed-dim": "#44d8f1",
+            "surface-container": "#202020",
+            "surface-tint": "#44d8f1",
+            "on-surface-variant": "#bbc9cc",
+            "surface-dim": "#131313",
+            "inverse-surface": "#e5e2e1",
+            "surface-container-low": "#1b1b1c",
+            "tertiary": "#ffb870",
+            "on-secondary-container": "#95fb92",
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "label": ["Inter", "sans-serif"],
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        },
+      },
+    }
+  </script>
   <link rel="stylesheet" href="css/shared.css"/>
   <style>
     #toast {
