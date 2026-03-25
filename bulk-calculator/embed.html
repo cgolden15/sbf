@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Material Calculator</title>
+    <style>
+        /* Embeddable Calculator Widget - Minimal Scoped Styles */
+        
+        .sbf-calculator {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .sbf-calculator * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Colors - Farm theme */
+        .sbf-calculator {
+            --primary-green: #2d5016;
+            --accent-green: #5a8f3a;
+            --light-green: #d4e8d4;
+            --warm-brown: #8b6f47;
+            --light-brown: #e8dcc8;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --border-color: #d4d4d4;
+        }
+
+        .sbf-calc-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--accent-green) 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .sbf-calc-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .sbf-calc-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .sbf-calc-body {
+            padding: 24px;
+        }
+
+        .sbf-calc-notice {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .sbf-calc-notice strong {
+            color: #d9534f;
+        }
+
+        .sbf-calc-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sbf-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sbf-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .sbf-calc-label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .sbf-calc-input,
+        .sbf-calc-select {
+            padding: 10px;
+            border: 2px solid var(--light-green);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: #fafaf8;
+            transition: border-color 0.3s;
+        }
+
+        .sbf-calc-input:focus,
+        .sbf-calc-select:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(90, 143, 58, 0.1);
+        }
+
+        .sbf-calc-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .sbf-calc-btn {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--accent-green) 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sbf-calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(45, 80, 22, 0.25);
+        }
+
+        .sbf-calc-btn:active {
+            transform: translateY(0);
+        }
+
+        .sbf-calc-results {
+            display: none;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid var(--light-green);
+        }
+
+        .sbf-calc-results.show {
+            display: block;
+        }
+
+        .sbf-result-box {
+            background: linear-gradient(135deg, var(--light-green) 0%, #e7f0e3 100%);
+            border: 2px solid var(--accent-green);
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .sbf-result-material {
+            font-size: 0.85rem;
+            color: var(--primary-green);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .sbf-result-amount {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .sbf-result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .sbf-result-unit {
+            font-size: 1rem;
+            color: var(--warm-brown);
+            font-weight: 600;
+        }
+
+        .sbf-result-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sbf-result-details {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .sbf-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--light-green);
+        }
+
+        .sbf-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .sbf-detail-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .sbf-detail-value {
+            color: var(--warm-brown);
+            font-weight: 600;
+        }
+
+        .sbf-calc-cta {
+            text-align: center;
+            padding: 16px;
+            background: linear-gradient(135deg, #f0f8e8 0%, #fff9f0 100%);
+            border-radius: 4px;
+        }
+
+        .sbf-calc-cta p {
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .sbf-calc-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--primary-green) 100%);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .sbf-calc-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(45, 80, 22, 0.25);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .sbf-calculator {
+                border-radius: 0;
+            }
+
+            .sbf-form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .sbf-calc-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .sbf-result-value {
+                font-size: 2rem;
+            }
+
+            .sbf-calc-body {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 20px; background: #f5f5f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+    <div class="sbf-calculator">
+        <div class="sbf-calc-header">
+            <h2>Bulk Material Calculator</h2>
+            <p>Shady Brook Farm</p>
+        </div>
+
+        <div class="sbf-calc-body">
+            <div class="sbf-calc-notice">
+                <strong>⚠️ ESTIMATE ONLY</strong>: This calculates approximate amounts. Actual quantities may vary. 
+            </div>
+
+            <form class="sbf-calc-form" id="sbfCalcForm">
+                <div class="sbf-form-group">
+                    <label class="sbf-calc-label" for="sbfMaterial">Select Material</label>
+                    <select class="sbf-calc-select" id="sbfMaterial" required>
+                        <optgroup label="Mulch">
+                            <option value="black-mulch">Black Dyed Mulch</option>
+                            <option value="triple-shred">Natural Triple Shred Mulch</option>
+                            <option value="premium-mulch">Premium Mulch (Natural Dark Brown)</option>
+                            <option value="red-tipple">Red Tipple</option>
+                            <option value="playground-mulch">Certified Playground Mulch</option>
+                        </optgroup>
+                        <optgroup label="Stone">
+                            <option value="clean-stone">3/4" Clean Stone</option>
+                            <option value="modified-stone">Modified Stone</option>
+                            <option value="stone-screenings">Stone Screenings</option>
+                            <option value="river-jack-3-8">3/8" River Jack Stone</option>
+                            <option value="river-jack-3-4">3/4" River Jack Stone</option>
+                            <option value="river-jack-1-3">1-3" River Jack Stone</option>
+                        </optgroup>
+                        <optgroup label="Other">
+                            <option value="sand">Sand</option>
+                            <option value="compost">Compost (Leaf Compost) Soil Amendment</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="sbf-form-row">
+                    <div class="sbf-form-group">
+                        <label class="sbf-calc-label" for="sbfLength">Length (feet)</label>
+                        <input class="sbf-calc-input" type="number" id="sbfLength" min="0.1" step="0.1" required>
+                    </div>
+                    <div class="sbf-form-group">
+                        <label class="sbf-calc-label" for="sbfWidth">Width (feet)</label>
+                        <input class="sbf-calc-input" type="number" id="sbfWidth" min="0.1" step="0.1" required>
+                    </div>
+                </div>
+
+                <div class="sbf-form-group">
+                    <label class="sbf-calc-label" for="sbfDepth">Depth (inches)</label>
+                    <input class="sbf-calc-input" type="number" id="sbfDepth" min="0.1" step="0.1" value="2.5" required>
+                    <div class="sbf-calc-hint">Recommended: 2-3" for mulch</div>
+                </div>
+
+                <button type="submit" class="sbf-calc-btn">Calculate Estimate</button>
+            </form>
+
+            <div class="sbf-calc-results" id="sbfResults">
+                <div class="sbf-result-box">
+                    <div class="sbf-result-material" id="sbfResultMaterial"></div>
+                    <div class="sbf-result-amount">
+                        <div class="sbf-result-value" id="sbfResultValue"></div>
+                        <div class="sbf-result-unit" id="sbfResultUnit"></div>
+                    </div>
+                    <div class="sbf-result-label">ESTIMATE - quantities may vary</div>
+                </div>
+
+                <div class="sbf-result-details">
+                    <div class="sbf-detail-row">
+                        <span class="sbf-detail-label">Area Covered:</span>
+                        <span class="sbf-detail-value"><span id="sbfDetailArea"></span> sq. ft.</span>
+                    </div>
+                    <div class="sbf-detail-row">
+                        <span class="sbf-detail-label">Volume:</span>
+                        <span class="sbf-detail-value"><span id="sbfDetailVolume"></span></span>
+                    </div>
+                    <div class="sbf-detail-row">
+                        <span class="sbf-detail-label">Recommended Qty:</span>
+                        <span class="sbf-detail-value"><span id="sbfDetailQty"></span></span>
+                    </div>
+                </div>
+
+                <div class="sbf-calc-cta">
+                    <p>Ready to order?</p>
+                    <a href="https://shadybrookfarm.com/collections/bulk-mulch" class="sbf-calc-link" target="_blank">
+                        Order from Shady Brook Farm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Material database
+        const sbfMaterials = {
+            'black-mulch': {
+                name: 'Black Dyed Mulch',
+                unit: 'cubic yards',
+                abbr: 'cu. yd.',
+                density: 1,
+                recommended_depth: 2.5
+            },
+            'triple-shred': {
+                name: 'Natural Triple Shred Mulch',
+                unit: 'cubic yards',
+                abbr: 'cu. yd.',
+                density: 1,
+                recommended_depth: 2.5
+            },
+            'premium-mulch': {
+                name: 'Premium Mulch (Natural Dark Brown)',
+                unit: 'cubic yards',
+                abbr: 'cu. yd.',
+                density: 1,
+                recommended_depth: 2.5
+            },
+            'playground-mulch': {
+                name: 'Certified Playground Mulch',
+                unit: 'cubic yards',
+                abbr: 'cu. yd.',
+                density: 1,
+                recommended_depth: 6
+            },
+            'red-tipple': {
+                name: 'Red Tipple',
+                unit: 'cubic yards',
+                abbr: 'cu. yd.',
+                density: 1,
+                recommended_depth: 2.5
+            },
+            'clean-stone': {
+                name: '3/4" Clean Stone',
+                unit: 'tons',
+                abbr: 'tons',
+                density: 1.5,
+                recommended_depth: 1.75
+            },
+            'modified-stone': {
+                name: 'Modified Stone',
+                unit: 'tons',
+                abbr: 'tons',
+                density: 1.5,
+                recommended_depth: 1.75
+            },
+            'stone-screenings': {
+                name: 'Stone Screenings',
+                unit: 'tons',
+                abbr: 'tons',
+                density: 1.5,
+                recommended_depth: 1
+            },
+            'river-jack-1-3': {
+                name: '1-3" River Jack Stone',
+                unit: 'tons',
+                abbr: 'tons',
+                density: 1.6,
+                recommended_depth: 2
+            },
+            'river-jack-3-4': {
+                name: '3/4" River Jack Stone',
+                unit: 'tons',
+                abbr: 'tons',
+                density: 1.6,
+                recommended_depth: 1.75
+            },
+            'river-jack-3-8': {
+                name: '3/8" River Jack Stone',
+                unit: 'tons',
+                abbr: 'tons',
+                density: 1.6,
+                recommended_depth: 1.5
+            },
+            'sand': {
+                name: 'Sand',
+                unit: 'cubic yards',
+                abbr: 'cu. yd.',
+                density: 1.3,
+                recommended_depth: 2
+            },
+            'compost': {
+                name: 'Compost (Leaf Compost) Soil Amendment',
+                unit: 'cubic yards',
+                abbr: 'cu. yd.',
+                density: 1,
+                recommended_depth: 2
+            }
+        };
+
+        // DOM
+        const sbfForm = document.getElementById('sbfCalcForm');
+        const sbfMaterial = document.getElementById('sbfMaterial');
+        const sbfLength = document.getElementById('sbfLength');
+        const sbfWidth = document.getElementById('sbfWidth');
+        const sbfDepth = document.getElementById('sbfDepth');
+        const sbfResults = document.getElementById('sbfResults');
+
+        // Init
+        document.addEventListener('DOMContentLoaded', function() {
+            sbfMaterial.addEventListener('change', updateDefaultDepth);
+            sbfForm.addEventListener('submit', handleCalculate);
+            updateDefaultDepth();
+        });
+
+        function updateDefaultDepth() {
+            const material = sbfMaterials[sbfMaterial.value];
+            sbfDepth.value = material.recommended_depth;
+        }
+
+        function handleCalculate(e) {
+            e.preventDefault();
+            const length = parseFloat(sbfLength.value);
+            const width = parseFloat(sbfWidth.value);
+            const depth = parseFloat(sbfDepth.value);
+
+            if (!length || !width || !depth) {
+                alert('Please enter all measurements');
+                return;
+            }
+
+            const material = sbfMaterials[sbfMaterial.value];
+            const area = length * width;
+            const cubicFeet = (length * width * depth) / 12;
+            const cubicYards = cubicFeet / 27;
+            const quantity = Math.max(0.5, Math.round(cubicYards * material.density * 10) / 10);
+
+            // Display results
+            document.getElementById('sbfResultMaterial').textContent = material.name;
+            document.getElementById('sbfResultValue').textContent = quantity;
+            document.getElementById('sbfResultUnit').textContent = material.abbr;
+            document.getElementById('sbfDetailArea').textContent = area.toFixed(1);
+            document.getElementById('sbfDetailVolume').textContent = 
+                `${cubicFeet.toFixed(1)} cu. ft. (${cubicYards.toFixed(2)} cu. yd.)`;
+            document.getElementById('sbfDetailQty').textContent = 
+                `${quantity} ${material.unit}`;
+
+            sbfResults.classList.add('show');
+        }
+    </script>
+
+</body>
+</html>
